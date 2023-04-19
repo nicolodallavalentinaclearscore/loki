@@ -1,5 +1,6 @@
 {{- $isSimpleScalable := eq (include "loki.deployment.isScalable" .) "true" -}}
 {{- if and $isSimpleScalable (gt (int .Values.write.replicas) 1) }}
+{{- if and .Values.write.podDisruptionBudget.enabled}}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -10,5 +11,11 @@ spec:
   selector:
     matchLabels:
       {{- include "loki.writeSelectorLabels" . | nindent 6 }}
-  maxUnavailable: 1
+{{- if .Values.write.podDisruptionBudget.minAvailable }}
+  minAvailable: {{ .Values.write.podDisruptionBudget.minAvailable }}
+{{- end }}
+{{- if .Values.write.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.write.podDisruptionBudget.maxUnavailable }}
+{{- end }}
+{{- end }}
 {{- end }}

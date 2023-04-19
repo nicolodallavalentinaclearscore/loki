@@ -610,6 +610,15 @@ monitoring:
 write:
   # -- Number of replicas for the write
   replicas: 3
+  # -- PodDisruptionBudget for `write` pod
+  podDisruptionBudget:
+    enabled: true
+    # -- Configures the minimum available pods for Loki disruptions.
+    # Cannot be used if `maxUnavailable` is set.
+    minAvailable: 1
+    # -- Configures the maximum unavailable pods for Loki disruptions.
+    # Cannot be used if `minAvailable` is set.
+    maxUnavailable:
   image:
     # -- The Docker registry for the write image. Overrides `loki.image.registry`
     registry: null
@@ -736,6 +745,15 @@ tableManager:
 read:
   # -- Number of replicas for the read
   replicas: 3
+  # -- podDisruptionBudget for `read` pod
+  podDisruptionBudget:
+    enabled: true
+    # -- Configures the minimum available pods for Loki disruptions.
+    # Cannot be used if `maxUnavailable` is set.
+    minAvailable: 1
+    # -- Configures the maximum unavailable pods for Loki disruptions.
+    # Cannot be used if `minAvailable` is set.
+    maxUnavailable:
   autoscaling:
     # -- Enable autoscaling for the read, this is only used if `queryIndex.enabled: true`
     enabled: false
@@ -1008,6 +1026,15 @@ gateway:
   enabled: true
   # -- Number of replicas for the gateway
   replicas: 1
+  # -- PodDisruptionBudget for `gateway` pod
+  podDisruptionBudget:
+    enabled: true
+    # -- Configures the minimum available pods for Loki disruptions.
+    # Cannot be used if `maxUnavailable` is set.
+    minAvailable: 1
+    # -- Configures the maximum unavailable pods for Loki disruptions.
+    # Cannot be used if `minAvailable` is set.
+    maxUnavailable:
   # -- Enable logging of 2xx and 3xx HTTP requests
   verboseLogging: true
   autoscaling:

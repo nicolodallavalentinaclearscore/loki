@@ -1,5 +1,6 @@
 {{- if and .Values.gateway.enabled }}
 {{- if gt (int .Values.gateway.replicas) 1 }}
+{{- if and .Values.gateway.podDisruptionBudget.enabled}}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -10,6 +11,11 @@ spec:
   selector:
     matchLabels:
       {{- include "loki.gatewaySelectorLabels" . | nindent 6 }}
-  maxUnavailable: 1
+{{- if .Values.gateway.podDisruptionBudget.minAvailable }}
+  minAvailable: {{ .Values.gateway.podDisruptionBudget.minAvailable }}
+{{- end }}
+{{- if .Values.gateway.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.gateway.podDisruptionBudget.maxUnavailable }}
+{{- end }}
 {{- end }}
 {{- end }}
